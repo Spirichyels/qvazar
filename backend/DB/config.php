@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost';
 $db   = 'library';
-$user = 'root';
+$global_user = 'root';
 $pass = '';
 $charset = 'utf8mb4';
 
@@ -13,7 +13,7 @@ $options = [
 ];
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
+    $pdo = new PDO($dsn, $global_user, $pass, $options);
 } catch (\PDOException $e) {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }

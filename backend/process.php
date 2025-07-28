@@ -7,6 +7,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         try {
             switch ($_POST['action']) {
+				case 'addUser':
+                    if ( empty($_POST['name']) || empty($_POST['email']) ) {
+                        throw new Exception("Все поля обязательны для заполнения");
+                    }
+                    
+                    $result = addUserBd(
+                        $pdo, 
+                        $_POST['name'],
+                        $_POST['email']
+                    );
+                    
+                    if ($result === true) {
+                        echo json_encode(['success' => true]);
+                    } else {
+                        throw new Exception($result);
+                    }
+                    break;
                 case 'reserve':
                     if (empty($_POST['book_id']) || empty($_POST['user_name']) || 
                         empty($_POST['email']) || empty($_POST['return_date'])) {

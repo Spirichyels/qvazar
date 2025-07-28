@@ -1,5 +1,5 @@
 <?php
-require 'functions.php';
+require __DIR__.'/backend/functions.php';
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -7,7 +7,7 @@ require 'functions.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Система бронирования книг</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./frontend/style.css">
 </head>
 <body>
     <div class="container">
@@ -32,6 +32,26 @@ require 'functions.php';
                     </div>
                     <?php endforeach; ?>
                 </div>
+				
+            </section>
+
+			<section class="users-section">
+                <h2>Читатели библиотеки</h2>
+				<button id="add-user-btn" class="add-user-btn" onclick="showReserveForm()">
+					<span>+</span> Добавить читателя
+				</button>
+                <div id="users-list" class="users-grid">
+                    <?php 
+                    $users = getUsers($pdo, true);
+                    foreach ($users as $user): 
+                    ?>
+                    <div class="users-card" data-id="<?= $user['id'] ?>">
+                        <h3><?= htmlspecialchars($user['name']) ?></h3>
+                        <p>email: <?= htmlspecialchars($user['email']) ?></p>  
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+				
             </section>
             
             <section class="reservations-section">
@@ -66,7 +86,7 @@ require 'functions.php';
             </section>
         </main>
         
-        <div id="reservation-modal" class="modal">
+        <!-- <div id="reservation-modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <h2>Бронирование книги</h2>
@@ -87,6 +107,25 @@ require 'functions.php';
                     <button type="submit" class="btn">Подтвердить бронирование</button>
                 </form>
             </div>
+        </div> -->
+
+		<div id="add-user-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Новый пользователь</h2>
+                <form id="add-user-form">
+                    <input type="hidden" id="book-id" name="book_id">
+                    <div class="form-group">
+                        <label for="input-user-name">Ваше имя:</label>
+                        <input type="text" id="input-user-name" name="input-user_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-user-email">Email:</label>
+                        <input type="email" id="input-user-email" name="input-user-email" required>
+                    </div>
+                    <button type="submit" class="btn">Сохранить пользователя</button>
+                </form>
+            </div>
         </div>
         
         <footer>
@@ -94,6 +133,6 @@ require 'functions.php';
         </footer>
     </div>
     
-    <script src="script.js"></script>
+    <script src= "./frontend/script.js"></script>
 </body>
 </html>

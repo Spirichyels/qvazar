@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require __DIR__.'/DB/config.php';
 
 function getBooks($pdo, $availableOnly = false) {
     $sql = "SELECT * FROM books";
@@ -18,7 +18,24 @@ function getActiveReservations($pdo) {
     $stmt = $pdo->query($sql);
     return $stmt->fetchAll();
 }
+function addUserBd($pdo, $userName, $email) {
+    $pdo->beginTransaction();
+	
+	try {
+		$id = 5;
+		$stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (?,?)");
+		$stmt->execute([$userName, $email]);
+		$pdo->commit();
+		return true;
 
+	} catch(Exception $e) {
+		$pdo->rollBack();
+        return $e->getMessage();
+	}
+	 
+
+
+}
 function reserveBook($pdo, $bookId, $userName, $email, $returnDate) {
     $pdo->beginTransaction();
     
@@ -50,6 +67,8 @@ function reserveBook($pdo, $bookId, $userName, $email, $returnDate) {
     }
 }
 
+
+
 function returnBook($pdo, $reservationId) {
     $pdo->beginTransaction();
     
@@ -77,5 +96,15 @@ function returnBook($pdo, $reservationId) {
         $pdo->rollBack();
         return $e->getMessage();
     }
+}
+
+
+function getUsers($pdo, $availableOnly = false) {
+    $sql = "SELECT * FROM users";
+    if ($availableOnly) {
+        $sql .= " WHERE is_available = 1";
+    }
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll();
 }
 ?>
