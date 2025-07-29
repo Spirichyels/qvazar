@@ -24,6 +24,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         throw new Exception($result);
                     }
                     break;
+					case 'addBook':
+						if ( empty($_POST['title']) || empty($_POST['author'])
+						|| empty($_POST['year_published']) || empty($_POST['isbn']) ) {
+							throw new Exception("Все поля обязательны для заполнения");
+						}
+						
+						$result = addBookBd(
+							$pdo, 
+							$_POST['title'],
+							$_POST['author'],
+							$_POST['year_published'],
+							$_POST['isbn'],
+
+						);
+						
+						if ($result === true) {
+							echo json_encode(['success' => true]);
+						} else {
+							throw new Exception($result);
+						}
+						break;
                 case 'reserve':
                     if (empty($_POST['book_id']) || empty($_POST['user_name']) || 
                         empty($_POST['email']) || empty($_POST['return_date'])) {
@@ -58,7 +79,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         throw new Exception($result);
                     }
                     break;
-                    
+				case 'deleteUser':
+						if (empty($_POST['id'])) {
+							throw new Exception("ID пользователя не указан");
+						}
+						
+						$result = deleteUser($pdo, $_POST['id']);
+						
+						if ($result === true) {
+							echo json_encode(['success' => true]);
+						} else {
+							throw new Exception($result);
+						}
+						break;
+				case 'deleteBook':
+							if (empty($_POST['id'])) {
+								throw new Exception("ID пользователя не указан");
+							}
+							
+							$result = deleteBook($pdo, $_POST['id']);
+							
+							if ($result === true) {
+								echo json_encode(['success' => true]);
+							} else {
+								throw new Exception($result);
+							}
+							break;
                 default:
                     throw new Exception("Неизвестное действие");
             }

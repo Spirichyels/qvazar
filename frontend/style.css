@@ -135,6 +135,25 @@ main {
     background-color: #2980b9;
 }
 
+.add-book-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    margin-bottom: 30px;
+
+    width: 50%;
+}
+
+.add-book-btn:hover {
+    background-color: #2980b9;
+}
+
 
 .reserve-btn {
     background-color: var(--primary);
@@ -226,7 +245,19 @@ tr:hover {
     color: var(--gray);
 }
 
+.del-user {
+   float: right;
+   font-size: 24px;
+   cursor: pointer;
+   color: var(--gray);
+}
+
+
 .close:hover {
+    color: var(--dark);
+}
+
+.del-user:hover {
     color: var(--dark);
 }
 

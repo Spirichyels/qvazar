@@ -17,13 +17,23 @@ require __DIR__.'/backend/functions.php';
         
         <main>
             <section class="books-section">
+
                 <h2>Доступные книги</h2>
+				<div >
+					<button id="add-user-btn" class="add-book-btn" onclick="showAddBookForm()">
+					<span>+</span> Добавить книгу
+				</button>
+				</div>
+				
+				
                 <div id="books-list" class="books-grid">
+					
                     <?php 
                     $books = getBooks($pdo, true);
                     foreach ($books as $book): 
                     ?>
                     <div class="book-card" data-id="<?= $book['id'] ?>">
+					<div><span class="del-user" onclick="delBook(<?= $book['id'] ?>)">&times;</span></div>
                         <h3><?= htmlspecialchars($book['title']) ?></h3>
                         <p>Автор: <?= htmlspecialchars($book['author']) ?></p>
                         <p>Год: <?= $book['year_published'] ?></p>
@@ -37,7 +47,7 @@ require __DIR__.'/backend/functions.php';
 
 			<section class="users-section">
                 <h2>Читатели библиотеки</h2>
-				<button id="add-user-btn" class="add-user-btn" onclick="showReserveForm()">
+				<button id="add-user-btn" class="add-user-btn" onclick="showAddUserForm()">
 					<span>+</span> Добавить читателя
 				</button>
                 <div id="users-list" class="users-grid">
@@ -46,8 +56,13 @@ require __DIR__.'/backend/functions.php';
                     foreach ($users as $user): 
                     ?>
                     <div class="users-card" data-id="<?= $user['id'] ?>">
+						<div><span class="del-user" onclick="delUser(<?= $user['id'] ?>)">&times;</span></div>
                         <h3><?= htmlspecialchars($user['name']) ?></h3>
-                        <p>email: <?= htmlspecialchars($user['email']) ?></p>  
+                        <p>email: <?= htmlspecialchars($user['email']) ?>
+						
+						<!-- <span class="close" onclick="">&times;</span>   -->
+					</p>
+						
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -86,9 +101,9 @@ require __DIR__.'/backend/functions.php';
             </section>
         </main>
         
-        <!-- <div id="reservation-modal" class="modal">
+        <div id="reservation-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
+                <span class="close" onclick="closeModalReservation()">&times;</span>
                 <h2>Бронирование книги</h2>
                 <form id="reservation-form">
                     <input type="hidden" id="book-id" name="book_id">
@@ -107,7 +122,7 @@ require __DIR__.'/backend/functions.php';
                     <button type="submit" class="btn">Подтвердить бронирование</button>
                 </form>
             </div>
-        </div> -->
+        </div>
 
 		<div id="add-user-modal" class="modal">
             <div class="modal-content">
@@ -124,6 +139,33 @@ require __DIR__.'/backend/functions.php';
                         <input type="email" id="input-user-email" name="input-user-email" required>
                     </div>
                     <button type="submit" class="btn">Сохранить пользователя</button>
+                </form>
+            </div>
+        </div>
+
+		<div id="add-book-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModalAddBook()">&times;</span>
+                <h2>Новая книга</h2>
+                <form id="add-book-form">
+                    <input type="hidden" id="book-id" name="book_id">
+					<div class="form-group">
+                        <label for="input-book-title">Название книги:</label>
+                        <input type="text" id="input-book-title" name="input-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-book-author">Автор книги:</label>
+                        <input type="text" id="input-book-author" name="input-author" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-book-year">Год:</label>
+                        <input type="year" id="input-book-year" name="input-book-year" required>
+                    </div>
+					<div class="form-group">
+                        <label for="input-book-isbn">ISBN:</label>
+                        <input type="ISBN" id="input-book-isbn" name="input-book-isbn" required>
+                    </div>
+                    <button type="submit" class="btn">Сохранить книгу</button>
                 </form>
             </div>
         </div>

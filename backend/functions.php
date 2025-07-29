@@ -32,9 +32,28 @@ function addUserBd($pdo, $userName, $email) {
 		$pdo->rollBack();
         return $e->getMessage();
 	}
+
+	
+		 
 	 
 
 
+}
+
+function addBookBd($pdo, $title, $author, $year_published, $isbn ){
+	$pdo->beginTransaction();
+	
+	try {
+		$id = 5;
+		$stmt = $pdo->prepare("INSERT INTO books (title, author,year_published,isbn) VALUES (?,?,?,?)");
+		$stmt->execute([$title, $author, $year_published, $isbn]);
+		$pdo->commit();
+		return true;
+
+	} catch(Exception $e) {
+		$pdo->rollBack();
+		return $e->getMessage();
+	}
 }
 function reserveBook($pdo, $bookId, $userName, $email, $returnDate) {
     $pdo->beginTransaction();
@@ -89,6 +108,63 @@ function returnBook($pdo, $reservationId) {
         // Обновляем статус книги
         $stmt = $pdo->prepare("UPDATE books SET is_available = 1 WHERE id = ?");
         $stmt->execute([$reservation['book_id']]);
+        
+        $pdo->commit();
+        return true;
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        return $e->getMessage();
+    }
+}
+
+
+function deleteUser($pdo, $id) {
+    $pdo->beginTransaction();
+    
+    try {
+        // Получаем информацию о бронированииDELETE FROM users WHERE id = 17
+		//"UPDATE id FROM users WHERE id = ?"
+		//SELECT * FROM `books` WHERE id =  1
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+        $find = $stmt->fetch();
+        
+        if (!$find) {
+            throw new Exception("ПОльзователь не найден");
+        }
+		else {
+			$stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
+			$stmt->execute([$id]);
+			//$pdo->commit();
+		}
+        
+        $pdo->commit();
+        return true;
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        return $e->getMessage();
+    }
+}
+
+function deleteBook($pdo, $id) {
+    $pdo->beginTransaction();
+    
+    try {
+        // Получаем информацию о бронированииDELETE FROM users WHERE id = 17
+		//"UPDATE id FROM users WHERE id = ?"
+		//SELECT * FROM `books` WHERE id =  1
+        $stmt = $pdo->prepare("SELECT id FROM books WHERE id = ?");
+        $stmt->execute([$id]);
+        $find = $stmt->fetch();
+        
+        if (!$find) {
+            throw new Exception("Книга не найдена");
+        }
+		else {
+			$stmt = $pdo->prepare("DELETE FROM books WHERE id = ?");
+			$stmt->execute([$id]);
+			//$pdo->commit();
+		}
         
         $pdo->commit();
         return true;
