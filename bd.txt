@@ -1,0 +1,27 @@
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    year_published YEAR,
+    isbn VARCHAR(20),
+    is_available BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE reservations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    book_id INT NOT NULL,
+    user_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    reservation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    return_date DATE NOT NULL,
+    status ENUM('active', 'completed') DEFAULT 'active',
+    FOREIGN KEY (book_id) REFERENCES books(id)
+);
+
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    is_available BOOLEAN DEFAULT TRUE
+);
