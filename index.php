@@ -69,7 +69,8 @@ require __DIR__.'/backend/functions.php';
 				
             </section>
             
-            <section class="reservations-section">
+
+			<section class="reservations-section">
                 <h2>Активные бронирования</h2>
                 <table id="reservations-table">
                     <thead>
@@ -105,16 +106,15 @@ require __DIR__.'/backend/functions.php';
             <div class="modal-content">
                 <span class="close" onclick="closeModalReservation()">&times;</span>
                 <h2>Бронирование книги</h2>
+
+				
                 <form id="reservation-form">
-                    <input type="hidden" id="book-id" name="book_id">
-                    <div class="form-group">
-                        <label for="user-name">Ваше имя:</label>
-                        <input type="text" id="user-name" name="user_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
+				<?php 
+                    $books = getBooks($pdo, true);
+                    foreach ($books as $book): 
+                    ?>
+					<?php endforeach; ?>
+			
                     <div class="form-group">
                         <label for="return-date">Вернуть до:</label>
                         <input type="date" id="return-date" name="return_date" required>
